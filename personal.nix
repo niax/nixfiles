@@ -18,4 +18,13 @@
 	  };
 	};
   };
+
+  programs.zsh.envExtra = builtins.concatStringsSep "\n" [
+  	''
+	. "$HOME/.nix-profile/etc/profile.d/nix.sh"
+	if [ -e "$HOME/.cargo/env" ]; then
+		. "$HOME/.cargo/env"
+	fi
+	''
+  ];
 }

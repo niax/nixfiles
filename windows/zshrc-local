@@ -1,0 +1,4 @@
+## SerenityOS build things
+
+export SERENITY_QEMU_BIN='/mnt/c/Program Files/qemu/qemu-system-x86_64.exe'
+export SERENITY_VIRT_TECH_ARG="-accel whpx,kernel-irqchip=off"
