@@ -23,21 +23,28 @@
   # changes in each release.
   home.stateVersion = "21.11";
 
-  home.packages = [
-      pkgs.tmux
-      pkgs.poetry
-	  pkgs.ripgrep
-	  pkgs.go
-	  pkgs.tig
+  home.packages = with pkgs; [
+    # Terminal things
+    tmux
+    jq
+    ripgrep
+
+    # Dev tools
+    tig
+    poetry
+
+    # Programming languages
+    go
+    python39
   ];
 
   home.file.".tmux.conf".source = ./tmux.conf;
 
   programs.git = {
     enable = true;
-	ignores = [
-	  "*.swp"
-	];
+    ignores = [
+      "*.swp"
+    ];
   };
 
   programs.keychain = {
