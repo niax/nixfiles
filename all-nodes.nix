@@ -39,4 +39,8 @@
 	  "*.swp"
 	];
   };
+
+  programs.keychain = {
+  	enable = true;
+  };
 }
