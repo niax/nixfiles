@@ -27,6 +27,7 @@
       pkgs.poetry
 	  pkgs.ripgrep
 	  pkgs.go
+	  pkgs.tig
   ];
 
   home.file.".tmux.conf".source = ./tmux.conf;

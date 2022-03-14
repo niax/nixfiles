@@ -67,6 +67,7 @@ in {
 	extraConfig = builtins.concatStringsSep "\n" [
 	  (lib.strings.fileContents ./base.vim)
 	  (lib.strings.fileContents ./plugins.vim)
+	  (lib.strings.fileContents ./ft.vim)
 
       ''
         lua << EOF
