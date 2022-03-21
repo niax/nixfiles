@@ -1,8 +1,9 @@
 { config, pkgs, lib, ... }: {
 
   imports = [
+    ./tmux
     ./vim
-	./shell.nix
+    ./shell.nix
   ];
 
   # Let Home Manager install and manage itself.
@@ -20,7 +21,6 @@
 
   home.packages = with pkgs; [
     # Terminal things
-    tmux
     jq
     ripgrep
 
