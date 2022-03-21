@@ -33,8 +33,6 @@
     python39
   ];
 
-  home.file.".tmux.conf".source = ./tmux.conf;
-
   programs.git = {
     enable = true;
     ignores = [
