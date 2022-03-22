@@ -5,30 +5,32 @@
       defaultKeymap = "emacs";
 
       history = {
-    	extended = true; # Save timestamps of commands in history
-      	expireDuplicatesFirst = true;
-    	ignoreDups = true;
-    	ignoreSpace = true;
-    	save = 10000;
-    	share = true; # Share command history between shells
-    	size = 50000;
+        extended = true; # Save timestamps of commands in history
+        expireDuplicatesFirst = true;
+        ignoreDups = true;
+        ignoreSpace = true;
+        save = 10000;
+        share = true; # Share command history between shells
+        size = 50000;
       };
 
       initExtraFirst = ''
-      	if [ -e "$HOME/.zshrc-local-early" ]; then
-    		source "$HOME/.zshrc-local-early"
-    	fi
+        if [ -e "$HOME/.zshrc-local-early" ]; then
+          source "$HOME/.zshrc-local-early"
+        fi
       '';
 
       initExtra = ''
-      	if [ -e "$HOME/.zshrc-local" ]; then
-    		source "$HOME/.zshrc-local"
-    	fi
+        if [ -e "$HOME/.zshrc-local" ]; then
+          source "$HOME/.zshrc-local"
+        fi
+
+        export PAGER="less -R"
       '';
 
       shellAliases = {
-      	gc = "git commit -v";
-      	gca = "git commit -va";
+        gc = "git commit -v";
+        gca = "git commit -va";
       };
   };
 
@@ -46,7 +48,7 @@
           "[\\)](cyan)"
           "$jobs"
           "$status"
-    	  "\n"
+          "\n"
           "[└─\\(](cyan)"
           "$time"
           "$git_branch"
