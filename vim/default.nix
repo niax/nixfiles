@@ -55,7 +55,7 @@ in {
       # Snippets
       (plugin "hrsh7th/cmp-vsnip")
       (plugin "hrsh7th/vim-vsnip")
-	  (plugin "rafamadriz/friendly-snippets")
+      (plugin "rafamadriz/friendly-snippets")
 
       # Search/Ctrl-P
       (plugin "nvim-lua/popup.nvim")
