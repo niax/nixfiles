@@ -31,6 +31,8 @@ in {
 	  nodePackages.typescript nodePackages.typescript-language-server
 	  nodePackages.pyright
 	  black
+    clang-tools
+    jdt-language-server lombok
 	];
 	plugins = with pkgs.vimPlugins; [
 	  # Style
@@ -42,7 +44,32 @@ in {
       (plugin "preservim/nerdcommenter")
       (plugin "tpope/vim-fugitive")
 
-      (plugin "nvim-treesitter/nvim-treesitter")
+      (nvim-treesitter.withPlugins(
+        plugins: with plugins; [
+          tree-sitter-bash
+          tree-sitter-c
+          tree-sitter-cpp
+          tree-sitter-go
+          tree-sitter-gomod
+          tree-sitter-css
+          tree-sitter-html
+          tree-sitter-javascript
+          tree-sitter-json
+          tree-sitter-tsx
+          tree-sitter-java
+          tree-sitter-kotlin
+          tree-sitter-dockerfile
+          tree-sitter-nix
+          tree-sitter-yaml
+          tree-sitter-cmake
+          tree-sitter-perl
+          tree-sitter-python
+          tree-sitter-ruby
+          tree-sitter-rust
+          tree-sitter-lua
+          tree-sitter-vim
+        ]
+      ))
 
       # LSP/Completion
       (plugin "neovim/nvim-lspconfig")
@@ -51,6 +78,7 @@ in {
       (plugin "hrsh7th/cmp-path")
       (plugin "hrsh7th/cmp-cmdline")
       (plugin "hrsh7th/nvim-cmp")
+      (plugin "mfussenegger/nvim-jdtls")
 
       # Snippets
       (plugin "hrsh7th/cmp-vsnip")
@@ -72,7 +100,7 @@ in {
       ''
         lua << EOF
         ${lib.strings.fileContents ./config.lua}
-        ${lib.strings.fileContents ./lsp.lua}
+        ${lib.replaceStrings ["@openjdk@" "@jdt-language-server@" "@lombok-root@"] ["${pkgs.openjdk}" "${pkgs.jdt-language-server}" "${pkgs.lombok}"] (lib.strings.fileContents ./lsp.lua)}
         EOF
       ''
 	];

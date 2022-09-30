@@ -73,12 +73,55 @@ local servers = {
   "pyright",
   "tsserver",
   "vimls",
+  "clangd",
 }
 
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,
-	flags = { debounce_text_changes = 150 },
-	capabilities = capabilities,
+    flags = { debounce_text_changes = 150 },
+    capabilities = capabilities,
   }
 end
+
+-- Special magic for Java
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  pattern = { "java" },
+  callback = function()
+    local jdtls = require('jdtls')
+		local root_markers = { 'gradlew', '.git' }
+		local root_dir = require('jdtls.setup').find_root(root_markers)
+		local home = os.getenv('HOME')
+		local workspace_dir = home .. '/.cache/nvim/java/' .. vim.fn.fnamemodify(root_dir, ':p:h:t')
+
+    jdtls.start_or_attach {
+      cmd = {
+        '@openjdk@/bin/java',
+        '-Declipse.application=org.eclipse.jdt.ls.core.id1',
+        '-Dosgi.bundles.defaultStartLevel=4',
+        '-Declipse.product=org.eclipse.jdt.ls.core.product',
+        '-Dosgi.sharedConfiguration.area=@jdt-language-server@/share/config',
+        '-Dosgi.sharedConfiguration.area.readOnly=true', '-Dosgi.checkConfiguration=true', '-Dosgi.configuration.cascaded=true',
+        '-Dlog.level=ALL', '-noverify',
+        '-javaagent:@lombok-root@/share/java/lombok.jar',
+        '-jar', '@jdt-language-server@/share/java/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar',
+        '--add-modules=ALL-SYSTEM', '--add-opens', 'java.base/java.util=ALL-UNNAMED', '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
+        '-data', workspace_dir,
+      },
+      java = {
+        signatureHelp = { enabled = true },
+        contentProvider = { preferred = "fernflower" },
+        codeGeneration = {
+          toString = {
+            template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}",
+          },
+          hashCodeEquals = {
+            useJava7Objects = true,
+          },
+          useBlocks = true,
+        },
+      },
+      onAttach = on_attach,
+    }
+  end
+})
