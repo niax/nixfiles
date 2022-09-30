@@ -1,42 +1,42 @@
 { config, pkgs, lib, ... }: {
   programs.zsh = {
-      enable = true;
+    enable = true;
 
-      defaultKeymap = "emacs";
+    defaultKeymap = "emacs";
 
-      history = {
-        extended = true; # Save timestamps of commands in history
-        expireDuplicatesFirst = true;
-        ignoreDups = true;
-        ignoreSpace = true;
-        save = 10000;
-        share = true; # Share command history between shells
-        size = 50000;
-      };
+    history = {
+      extended = true; # Save timestamps of commands in history
+      expireDuplicatesFirst = true;
+      ignoreDups = true;
+      ignoreSpace = true;
+      save = 10000;
+      share = true; # Share command history between shells
+      size = 50000;
+    };
 
-      initExtraFirst = ''
-        if [ -e "$HOME/.zshrc-local-early" ]; then
-          source "$HOME/.zshrc-local-early"
-        fi
-      '';
+    initExtraFirst = ''
+      if [ -e "$HOME/.zshrc-local-early" ]; then
+        source "$HOME/.zshrc-local-early"
+      fi
+    '';
 
-      initExtra = ''
-        if [ -e "$HOME/.zshrc-local" ]; then
-          source "$HOME/.zshrc-local"
-        fi
+    initExtra = ''
+      if [ -e "$HOME/.zshrc-local" ]; then
+        source "$HOME/.zshrc-local"
+      fi
 
-        export PAGER="less -R"
+      export PAGER="less -R"
 
-        autoload -U edit-command-line
-        zle -N edit-command-line
-        bindkey '^xe' edit-command-line
-        bindkey '^x^e' edit-command-line
-      '';
+      autoload -U edit-command-line
+      zle -N edit-command-line
+      bindkey '^xe' edit-command-line
+      bindkey '^x^e' edit-command-line
+    '';
 
-      shellAliases = {
-        gc = "git commit -v";
-        gca = "git commit -va";
-      };
+    shellAliases = {
+      gc = "git commit -v";
+      gca = "git commit -va";
+    };
   };
 
   programs.starship = {
@@ -44,25 +44,25 @@
     enableZshIntegration = true;
     settings = {
       format = lib.concatStrings [
-          "[┌─\\(](cyan)"
-          "$username"
-          "$hostname"
-          "$shlvl"
-          "[\\)─\\(](cyan)"
-          "$directory"
-          "[\\)](cyan)"
-          "$jobs"
-          "$status"
-          "\n"
-          "[└─\\(](cyan)"
-          "$time"
-          "$git_branch"
-          "$git_commit"
-          "$git_state"
-          "$git_metrics"
-          "$git_status"
-          "[\\)──](cyan)"
-          "$character"
+        "[┌─\\(](cyan)"
+        "$username"
+        "$hostname"
+        "$shlvl"
+        "[\\)─\\(](cyan)"
+        "$directory"
+        "[\\)](cyan)"
+        "$jobs"
+        "$status"
+        "\n"
+        "[└─\\(](cyan)"
+        "$time"
+        "$git_branch"
+        "$git_commit"
+        "$git_state"
+        "$git_metrics"
+        "$git_status"
+        "[\\)──](cyan)"
+        "$character"
       ];
 
       username = {

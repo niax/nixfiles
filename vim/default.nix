@@ -11,31 +11,34 @@ let
   };
   # always installs latest version
   plugin = pluginGit "HEAD";
-in {
+in
+{
   programs.neovim = {
-  	enable = true;
-	viAlias = true;
-	vimAlias = true;
-	vimdiffAlias = true;
+    enable = true;
+    viAlias = true;
+    vimAlias = true;
+    vimdiffAlias = true;
 
-	withPython3 = true;
-	withRuby = true;
-	withNodeJs = true;
+    withPython3 = true;
+    withRuby = true;
+    withNodeJs = true;
 
-	extraPackages = with pkgs; [
-	  tree-sitter
+    extraPackages = with pkgs; [
+      tree-sitter
 
-	  # Language servers
-	  nodePackages.vim-language-server
-	  gopls
-	  nodePackages.typescript nodePackages.typescript-language-server
-	  nodePackages.pyright
-	  black
-    clang-tools
-    jdt-language-server lombok
-	];
-	plugins = with pkgs.vimPlugins; [
-	  # Style
+      # Language servers
+      nodePackages.vim-language-server
+      gopls
+      nodePackages.typescript
+      nodePackages.typescript-language-server
+      nodePackages.pyright
+      black
+      clang-tools
+      jdt-language-server
+      lombok
+    ];
+    plugins = with pkgs.vimPlugins; [
+      # Style
       (plugin "ryanoasis/vim-devicons")
       (plugin "altercation/vim-colors-solarized")
       (plugin "itchyny/lightline.vim")
@@ -44,7 +47,7 @@ in {
       (plugin "preservim/nerdcommenter")
       (plugin "tpope/vim-fugitive")
 
-      (nvim-treesitter.withPlugins(
+      (nvim-treesitter.withPlugins (
         plugins: with plugins; [
           tree-sitter-bash
           tree-sitter-c
@@ -90,12 +93,12 @@ in {
       (plugin "nvim-lua/plenary.nvim")
       (plugin "nvim-telescope/telescope.nvim")
 
-	];
+    ];
 
-	extraConfig = builtins.concatStringsSep "\n" [
-	  (lib.strings.fileContents ./base.vim)
-	  (lib.strings.fileContents ./plugins.vim)
-	  (lib.strings.fileContents ./ft.vim)
+    extraConfig = builtins.concatStringsSep "\n" [
+      (lib.strings.fileContents ./base.vim)
+      (lib.strings.fileContents ./plugins.vim)
+      (lib.strings.fileContents ./ft.vim)
 
       ''
         lua << EOF
@@ -103,6 +106,6 @@ in {
         ${lib.replaceStrings ["@openjdk@" "@jdt-language-server@" "@lombok-root@"] ["${pkgs.openjdk}" "${pkgs.jdt-language-server}" "${pkgs.lombok}"] (lib.strings.fileContents ./lsp.lua)}
         EOF
       ''
-	];
+    ];
   };
 }

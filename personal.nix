@@ -20,7 +20,7 @@
   };
 
   programs.keychain = {
-    keys = [];
+    keys = [ ];
     agents = [ "ssh" ];
   };
 

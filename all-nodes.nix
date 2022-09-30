@@ -41,6 +41,6 @@
   };
 
   programs.keychain = {
-  	enable = true;
+    enable = true;
   };
 }
