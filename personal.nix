@@ -20,7 +20,11 @@
   };
 
   programs.keychain = {
-    keys = [ ];
+    keys = [
+      "id_ecdsa"
+      "id_ed25519"
+      "id_rsa"
+    ];
     agents = [ "ssh" ];
   };
 
