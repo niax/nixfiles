@@ -12,19 +12,26 @@
   programs.git = {
     userName = "Nicholas Hollett";
     userEmail = "niax@niax.co.uk";
-	extraConfig = {
-	  init = {
-	    defaultBranch = "main";
-	  };
-	};
+    extraConfig = {
+      init = {
+        defaultBranch = "main";
+      };
+    };
+  };
+
+  programs.keychain = {
+    keys = [];
+    agents = [ "ssh" ];
   };
 
   programs.zsh.envExtra = builtins.concatStringsSep "\n" [
-  	''
-	. "$HOME/.nix-profile/etc/profile.d/nix.sh"
-	if [ -e "$HOME/.cargo/env" ]; then
-		. "$HOME/.cargo/env"
-	fi
-	''
+    ''
+      if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
+        . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+      fi
+      if [ -e "$HOME/.cargo/env" ]; then
+        . "$HOME/.cargo/env"
+      fi
+    ''
   ];
 }
