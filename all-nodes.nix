@@ -23,10 +23,13 @@
     # Terminal things
     jq
     ripgrep
+    visidata
 
     # Dev tools
     tig
     poetry
+    inotify-tools
+    awscli2
 
     # Programming languages
     go
