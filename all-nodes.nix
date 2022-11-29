@@ -28,12 +28,13 @@
     # Dev tools
     tig
     poetry
-    inotify-tools
     awscli2
 
     # Programming languages
     go
     python39
+  ] ++ lib.optionals stdenv.isLinux [
+    inotify-tools
   ];
 
   programs.git = {
