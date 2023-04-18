@@ -23,6 +23,7 @@
     # Terminal things
     jq
     ripgrep
+    htop
     visidata
 
     # Dev tools
