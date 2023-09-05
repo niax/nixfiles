@@ -26,6 +26,9 @@
     htop
     visidata
 
+    # Network things
+    nmap
+
     # Dev tools
     tig
     poetry
