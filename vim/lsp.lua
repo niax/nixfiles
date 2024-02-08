@@ -89,10 +89,13 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
   pattern = { "java" },
   callback = function()
     local jdtls = require('jdtls')
-		local root_markers = { 'gradlew', '.git' }
-		local root_dir = require('jdtls.setup').find_root(root_markers)
-		local home = os.getenv('HOME')
-		local workspace_dir = home .. '/.cache/nvim/java/' .. vim.fn.fnamemodify(root_dir, ':p:h:t')
+                local root_markers = { 'gradlew', '.git' }
+                local root_dir = require('jdtls.setup').find_root(root_markers)
+                local home = os.getenv('HOME')
+                local workspace_dir = home .. '/.cache/nvim/java/' .. vim.fn.fnamemodify(root_dir, ':p:h:t')
+
+    local jdt_language_server_path = '@jdt-language-server@'
+    local jdt_jar = vim.fn.glob(jdt_language_server_path .. "/share/java/plugins/org.eclipse.equinox.launcher_*.jar")
 
     jdtls.start_or_attach {
       cmd = {
@@ -104,7 +107,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
         '-Dosgi.sharedConfiguration.area.readOnly=true', '-Dosgi.checkConfiguration=true', '-Dosgi.configuration.cascaded=true',
         '-Dlog.level=ALL', '-noverify',
         '-javaagent:@lombok-root@/share/java/lombok.jar',
-        '-jar', '@jdt-language-server@/share/java/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar',
+        '-jar', jdt_jar,
         '--add-modules=ALL-SYSTEM', '--add-opens', 'java.base/java.util=ALL-UNNAMED', '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
         '-data', workspace_dir,
       },
