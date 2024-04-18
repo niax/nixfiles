@@ -28,5 +28,6 @@ yabai -m rule --add app=System\ Preferences manage=off
 yabai -m rule --add app=System\ Settings manage=off
 yabai -m rule --add app=AnyConnect manage=off
 yabai -m rule --add app=Google\ Chrome title=Picture\ in\ Picture manage=off
+yabai -m rule --add app=Google\ Chrome title=Picture-in-picture manage=off
 
 echo "yabai configuration loaded.."
