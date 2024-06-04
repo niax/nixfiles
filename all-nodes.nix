@@ -28,6 +28,7 @@
 
     # Network things
     nmap
+    mtr
 
     # Dev tools
     tig
