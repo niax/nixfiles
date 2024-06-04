@@ -34,37 +34,43 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   }
 )
 
-local nvim_lsp = require('lspconfig')
-local on_attach = function(client, bufnr)
-  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local bufnr = args.buf
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+    local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
-  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+    buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-  -- Mappings.
-  local opts = { noremap = true, silent = true }
-  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', 'gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+    -- Mappings.
+    local opts = { noremap = true, silent = true }
+    buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+    buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+    buf_set_keymap('n', 'gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+    buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+    buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
 
-  buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  buf_set_keymap('n', '<leader>rd', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-  buf_set_keymap('n', '<leader>ra', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  buf_set_keymap('n', '<leader>rh', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap('n', '<leader>rs', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  buf_set_keymap('n', '<leader>rk', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-  buf_set_keymap('n', '<leader>rj', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-  buf_set_keymap('n', '<leader>rl', '<cmd>lua vim.diagnostic.set_loclist()<CR>', opts)
+    buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+    buf_set_keymap('n', '<leader>rd', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+    buf_set_keymap('n', '<leader>ra', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+    buf_set_keymap('n', '<leader>rh', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+    buf_set_keymap('n', '<leader>rs', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+    buf_set_keymap('n', '<leader>rk', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+    buf_set_keymap('n', '<leader>rj', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+    buf_set_keymap('n', '<leader>rl', '<cmd>lua vim.diagnostic.set_loclist()<CR>', opts)
 
-  -- Set some keybinds conditional on server capabilities
-  if client.resolved_capabilities.document_formatting then
-    buf_set_keymap("n", "<leader>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
-  elseif client.resolved_capabilities.document_range_formatting then
-    buf_set_keymap("n", "<leader>f", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
-  end
-end
+    local hollettn_debug = vim.inspect(client)
+    print(hollettn_debug)
+
+    -- Set some keybinds conditional on server capabilities
+    if client.server_capabilities.document_formatting then
+      buf_set_keymap("n", "<leader>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+    elseif client.server_capabilities.document_range_formatting then
+      buf_set_keymap("n", "<leader>f", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
+    end
+  end,
+})
 
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
@@ -77,8 +83,7 @@ local servers = {
 }
 
 for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup {
-    on_attach = on_attach,
+  lspconfig[lsp].setup {
     flags = { debounce_text_changes = 150 },
     capabilities = capabilities,
   }
@@ -97,17 +102,29 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
     local jdt_language_server_path = '@jdt-language-server@'
     local jdt_jar = vim.fn.glob(jdt_language_server_path .. "/share/java/plugins/org.eclipse.equinox.launcher_*.jar")
 
-    jdtls.start_or_attach {
+    local nix_jdt_path = '@jdt-language-server@';
+    local jdt_plugin_re = vim.regex('^org\\.eclipse\\.equinox\\.launcher_');
+    local jdt_plugin_root = nix_jdt_path .. '/share/java/jdtls/plugins/';
+    local jdt_plugin_path = nil;
+
+    for path in vim.fs.dir(jdt_plugin_root) do
+      if jdt_plugin_re:match_str(path) then
+        jdt_plugin_path = jdt_plugin_root .. path
+        break
+      end
+    end
+
+    local config = {
       cmd = {
         '@openjdk@/bin/java',
         '-Declipse.application=org.eclipse.jdt.ls.core.id1',
         '-Dosgi.bundles.defaultStartLevel=4',
         '-Declipse.product=org.eclipse.jdt.ls.core.product',
-        '-Dosgi.sharedConfiguration.area=@jdt-language-server@/share/config',
+        '-Dosgi.sharedConfiguration.area=@jdt-language-server@/share/java/jdtls/config_linux',
         '-Dosgi.sharedConfiguration.area.readOnly=true', '-Dosgi.checkConfiguration=true', '-Dosgi.configuration.cascaded=true',
         '-Dlog.level=ALL', '-noverify',
         '-javaagent:@lombok-root@/share/java/lombok.jar',
-        '-jar', jdt_jar,
+        '-jar', jdt_plugin_path,
         '--add-modules=ALL-SYSTEM', '--add-opens', 'java.base/java.util=ALL-UNNAMED', '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
         '-data', workspace_dir,
       },
@@ -124,7 +141,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
           useBlocks = true,
         },
       },
-      onAttach = on_attach,
     }
+    jdtls.start_or_attach(config)
   end
 })
