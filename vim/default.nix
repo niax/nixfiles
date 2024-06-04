@@ -37,7 +37,6 @@ in
     plugins = with pkgs.vimPlugins; [
       # Style
       (plugin "ryanoasis/vim-devicons" "71f239af28b7214eebb60d4ea5bd040291fb7e33")
-      #(plugin "altercation/vim-colors-solarized" "528a59f26d12278698bb946f8fb82a63711eec21")
       (plugin "rebelot/kanagawa.nvim" "08ed29989834f5f2606cb1ef9d5b24c5ea7b8fa5")
       (plugin "itchyny/lightline.vim" "58c97bc21c6f657d3babdd4eefce7593e30e75ce")
 
