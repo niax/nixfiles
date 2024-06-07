@@ -33,6 +33,10 @@ in
       clang-tools
       jdt-language-server
       lombok
+
+      # Rust things
+      rust-analyzer
+      rustup
     ];
     plugins = with pkgs.vimPlugins; [
       # Style
@@ -44,6 +48,7 @@ in
       (plugin "preservim/nerdcommenter" "7bb1f72e802a80e37bdda5f6906c69b5a93de1eb")
       (plugin "tpope/vim-fugitive" "4f59455d2388e113bd510e85b310d15b9228ca0d")
 
+      # Treesitter
       (nvim-treesitter.withAllGrammars)
 
       # LSP/Completion

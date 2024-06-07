@@ -60,9 +60,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
     buf_set_keymap('n', '<leader>rj', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
     buf_set_keymap('n', '<leader>rl', '<cmd>lua vim.diagnostic.set_loclist()<CR>', opts)
 
-    local hollettn_debug = vim.inspect(client)
-    print(hollettn_debug)
-
     -- Set some keybinds conditional on server capabilities
     if client.server_capabilities.document_formatting then
       buf_set_keymap("n", "<leader>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
@@ -80,6 +77,7 @@ local servers = {
   "tsserver",
   "vimls",
   "clangd",
+  "rust_analyzer",
 }
 
 for _, lsp in ipairs(servers) do
@@ -94,10 +92,10 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
   pattern = { "java" },
   callback = function()
     local jdtls = require('jdtls')
-                local root_markers = { 'gradlew', '.git' }
-                local root_dir = require('jdtls.setup').find_root(root_markers)
-                local home = os.getenv('HOME')
-                local workspace_dir = home .. '/.cache/nvim/java/' .. vim.fn.fnamemodify(root_dir, ':p:h:t')
+    local root_markers = { 'gradlew', '.git' }
+    local root_dir = require('jdtls.setup').find_root(root_markers)
+    local home = os.getenv('HOME')
+    local workspace_dir = home .. '/.cache/nvim/java/' .. vim.fn.fnamemodify(root_dir, ':p:h:t')
 
     local jdt_language_server_path = '@jdt-language-server@'
     local jdt_jar = vim.fn.glob(jdt_language_server_path .. "/share/java/plugins/org.eclipse.equinox.launcher_*.jar")
