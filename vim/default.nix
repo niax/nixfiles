@@ -28,7 +28,7 @@ in
       gopls
       nodePackages.typescript
       nodePackages.typescript-language-server
-      nodePackages.pyright
+      pyright
       black
       clang-tools
       jdt-language-server
