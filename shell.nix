@@ -14,13 +14,11 @@
       size = 50000;
     };
 
-    initExtraFirst = ''
+    initContent = lib.mkBefore ''
       if [ -e "$HOME/.zshrc-local-early" ]; then
         source "$HOME/.zshrc-local-early"
       fi
-    '';
 
-    initExtra = ''
       if [ -e "$HOME/.zshrc-local" ]; then
         source "$HOME/.zshrc-local"
       fi

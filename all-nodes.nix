@@ -37,7 +37,7 @@
 
     # Programming languages
     go
-    python39
+    python3
   ] ++ lib.optionals stdenv.isLinux [
     inotify-tools
   ];

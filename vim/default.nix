@@ -7,6 +7,7 @@ let
       url = "https://github.com/${repo}.git";
       rev = rev;
     };
+    doCheck = false;
   };
 in
 {
@@ -53,11 +54,11 @@ in
 
       # LSP/Completion
       (plugin "neovim/nvim-lspconfig" "74e14808cdb15e625449027019406e1ff6dda020")
+      (plugin "hrsh7th/nvim-cmp" "5260e5e8ecadaf13e6b82cf867a909f54e15fd07")
       (plugin "hrsh7th/cmp-nvim-lsp" "39e2eda76828d88b773cc27a3f61d2ad782c922d")
       (plugin "hrsh7th/cmp-buffer" "3022dbc9166796b644a841a02de8dd1cc1d311fa")
       (plugin "hrsh7th/cmp-path" "91ff86cd9c29299a64f968ebb45846c485725f23")
       (plugin "hrsh7th/cmp-cmdline" "d250c63aa13ead745e3a40f61fdd3470efde3923")
-      (plugin "hrsh7th/nvim-cmp" "5260e5e8ecadaf13e6b82cf867a909f54e15fd07")
       (plugin "mfussenegger/nvim-jdtls" "ad5ab1c9246caa9e2c69a7c13d2be9901b5c02aa")
 
       # Snippets
@@ -69,7 +70,6 @@ in
       (plugin "nvim-lua/popup.nvim" "b7404d35d5d3548a82149238289fa71f7f6de4ac")
       (plugin "nvim-lua/plenary.nvim" "a3e3bc82a3f95c5ed0d7201546d5d2c19b20d683")
       (plugin "nvim-telescope/telescope.nvim" "dfa230be84a044e7f546a6c2b0a403c739732b86")
-
     ];
 
     extraConfig = builtins.concatStringsSep "\n" [
