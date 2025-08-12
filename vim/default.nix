@@ -42,24 +42,24 @@ in
     plugins = with pkgs.vimPlugins; [
       # Style
       (plugin "ryanoasis/vim-devicons" "71f239af28b7214eebb60d4ea5bd040291fb7e33")
-      (plugin "rebelot/kanagawa.nvim" "08ed29989834f5f2606cb1ef9d5b24c5ea7b8fa5")
-      (plugin "itchyny/lightline.vim" "58c97bc21c6f657d3babdd4eefce7593e30e75ce")
+      (plugin "rebelot/kanagawa.nvim" "debe91547d7fb1eef34ce26a5106f277fbfdd109")
+      (plugin "itchyny/lightline.vim" "e358557e1a9f9fc860416c8eb2e34c0404078155")
 
-      (plugin "preservim/nerdtree" "fbb71fcd90602e3ec77f40b864b5f9b437c496c5")
-      (plugin "preservim/nerdcommenter" "7bb1f72e802a80e37bdda5f6906c69b5a93de1eb")
-      (plugin "tpope/vim-fugitive" "4f59455d2388e113bd510e85b310d15b9228ca0d")
+      (plugin "preservim/nerdtree" "9b465acb2745beb988eff3c1e4aa75f349738230")
+      (plugin "preservim/nerdcommenter" "02a3b6455fa07b61b9440a78732f1e9b7876c991")
+      (plugin "tpope/vim-fugitive" "61b51c09b7c9ce04e821f6cf76ea4f6f903e3cf4")
 
       # Treesitter
       (nvim-treesitter.withAllGrammars)
 
       # LSP/Completion
-      (plugin "neovim/nvim-lspconfig" "74e14808cdb15e625449027019406e1ff6dda020")
-      (plugin "hrsh7th/nvim-cmp" "5260e5e8ecadaf13e6b82cf867a909f54e15fd07")
-      (plugin "hrsh7th/cmp-nvim-lsp" "39e2eda76828d88b773cc27a3f61d2ad782c922d")
-      (plugin "hrsh7th/cmp-buffer" "3022dbc9166796b644a841a02de8dd1cc1d311fa")
-      (plugin "hrsh7th/cmp-path" "91ff86cd9c29299a64f968ebb45846c485725f23")
-      (plugin "hrsh7th/cmp-cmdline" "d250c63aa13ead745e3a40f61fdd3470efde3923")
-      (plugin "mfussenegger/nvim-jdtls" "ad5ab1c9246caa9e2c69a7c13d2be9901b5c02aa")
+      (plugin "neovim/nvim-lspconfig" "f0c6ccf43997a1c7e9ec4aea36ffbf2ddd9f15ef")
+      (plugin "hrsh7th/nvim-cmp" "b5311ab3ed9c846b585c0c15b7559be131ec4be9")
+      (plugin "hrsh7th/cmp-nvim-lsp" "a8912b88ce488f411177fc8aed358b04dc246d7b")
+      (plugin "hrsh7th/cmp-buffer" "b74fab3656eea9de20a9b8116afa3cfc4ec09657")
+      (plugin "hrsh7th/cmp-path" "c642487086dbd9a93160e1679a1327be111cbc25")
+      (plugin "hrsh7th/cmp-cmdline" "d126061b624e0af6c3a556428712dd4d4194ec6d")
+      (plugin "mfussenegger/nvim-jdtls" "4d77ff02063cf88963d5cf10683ab1fd15d072de")
 
       # Snippets
       (plugin "hrsh7th/cmp-vsnip" "989a8a73c44e926199bfd05fa7a516d51f2d2752")
@@ -68,8 +68,8 @@ in
 
       # Search/Ctrl-P
       (plugin "nvim-lua/popup.nvim" "b7404d35d5d3548a82149238289fa71f7f6de4ac")
-      (plugin "nvim-lua/plenary.nvim" "a3e3bc82a3f95c5ed0d7201546d5d2c19b20d683")
-      (plugin "nvim-telescope/telescope.nvim" "dfa230be84a044e7f546a6c2b0a403c739732b86")
+      (plugin "nvim-lua/plenary.nvim" "b9fd5226c2f76c951fc8ed5923d85e4de065e509")
+      (plugin "nvim-telescope/telescope.nvim" "b4da76be54691e854d3e0e02c36b0245f945c2c7")
     ];
 
     extraConfig = builtins.concatStringsSep "\n" [
