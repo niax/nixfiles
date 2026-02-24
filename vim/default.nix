@@ -70,6 +70,9 @@ in
       (plugin "nvim-lua/popup.nvim" "b7404d35d5d3548a82149238289fa71f7f6de4ac")
       (plugin "nvim-lua/plenary.nvim" "b9fd5226c2f76c951fc8ed5923d85e4de065e509")
       (plugin "nvim-telescope/telescope.nvim" "b4da76be54691e854d3e0e02c36b0245f945c2c7")
+
+      # Slop
+      (plugin "olimorris/codecompanion.nvim" "879e0511161c59e45ff04aff2bce6bcb6b86642b") # 18.5.0
     ];
 
     extraConfig = builtins.concatStringsSep "\n" [
