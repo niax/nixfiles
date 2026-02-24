@@ -24,7 +24,7 @@
     jq
     ripgrep
     htop
-    visidata
+    jless
 
     # Network things
     nmap
