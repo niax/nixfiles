@@ -10,9 +10,11 @@
   home.homeDirectory = "/home/niax";
 
   programs.git = {
-    userName = "Nicholas Hollett";
-    userEmail = "niax@niax.co.uk";
-    extraConfig = {
+    settings = {
+      user = {
+        name = "Nicholas Hollett";
+        email = "niax@niax.co.uk";
+      };
       init = {
         defaultBranch = "main";
       };
@@ -25,7 +27,6 @@
       "id_ed25519"
       "id_rsa"
     ];
-    agents = [ "ssh" ];
   };
 
   programs.zsh.envExtra = builtins.concatStringsSep "\n" [
