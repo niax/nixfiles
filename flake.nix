@@ -21,6 +21,9 @@
       homeConfigurations = {
         # Windows/WSL
         "niax@big-thunder" = mkHome "x86_64-linux" ./home-windows.nix;
+
+        # Mac
+        "niax@lightcycle" = mkHome "aarch64-darwin" ./home-mac.nix;
       };
     };
 }
