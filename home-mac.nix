@@ -6,4 +6,8 @@
   ];
 
   home.homeDirectory = lib.mkForce "/Users/niax";
+
+  home.packages = with pkgs; [
+    claude-code
+  ];
 }
