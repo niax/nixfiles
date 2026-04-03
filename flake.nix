@@ -41,9 +41,15 @@
           home-manager.nixosModules.home-manager
           ({pkgs, ...}: {
             nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+            nixpkgs.overlays = [ claude-code.overlays.default ];
+            nixpkgs.config.allowUnfree = true;
+
             wsl.enable = true;
             wsl.defaultUser = "niax";
+
             system.stateVersion = "25.11"; # NO TOUCH ME!
+
             networking.hostName = "hotel-hightower";
 
             environment.systemPackages = with pkgs; [
