@@ -1,7 +1,6 @@
 keys:
   - &hotel-hightower-host age14eutr45a6xr2d0ngkv8ayld5662l6rsgall4thhmun3x6ard4ulqe0fqj2
   - &hotel-hightower-user age1jfudxjjhqcjfkjsnh335avfs529fkdlaxj2hrdg6yf6ayw2p3vjsuptyvr
-  - &lightcycle-user age1wf0vluqr6y84ek8nqty759xxf8cfvqg46v0558e6almqn73839aq6vy0dn
   - &lightcycle age1czsehhtpchvu78lsnvaeu6zqlpdksa5ufw9mnj4esnqed92xw4xqcl7yp3
 
 creation_rules:
@@ -10,7 +9,7 @@ creation_rules:
       - age:
         - *hotel-hightower-host
         - *hotel-hightower-user
-        - *lightcycle-user
+        - *lightcycle
   - path_regex: secrets/hotel-hightower\.yaml$
     key_groups:
       - age:
@@ -20,4 +19,4 @@ creation_rules:
     key_groups:
       - age:
         - *hotel-hightower-user
-        - *lightcycle-user
+        - *lightcycle
