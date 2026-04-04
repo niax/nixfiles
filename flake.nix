@@ -35,7 +35,13 @@
         "niax@big-thunder" = mkHome "x86_64-linux" [ ./home-windows.nix ];
 
         # Mac
-        "niax@lightcycle" = mkHome "aarch64-darwin" [ ./home-mac.nix ];
+        "niax@lightcycle" = mkHome "aarch64-darwin" [
+          ./home-mac.nix
+          ./blue-team.nix
+          ({config, ...}: {
+            sops.age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+          })
+        ];
       };
       nixosConfigurations."hotel-hightower" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
