@@ -12,35 +12,42 @@
       url = "github:nix-community/NixOS-WSL/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { nixpkgs, nixos-wsl, home-manager, claude-code, ... }:
+  outputs = { nixpkgs, nixos-wsl, home-manager, claude-code, sops-nix, ... }:
     let
-      # Helper to build a homeConfiguration for a given system + module
-      mkHome = system: module:
+      mkHome = system: modules:
         home-manager.lib.homeManagerConfiguration {
           pkgs = import nixpkgs {
             inherit system;
             overlays = [ claude-code.overlays.default ];
             config.allowUnfree = true;
           };
-          modules = [ module ];
+          modules = [ sops-nix.homeManagerModules.sops ] ++ modules;
         };
     in {
       homeConfigurations = {
         # Windows/WSL
-        "niax@big-thunder" = mkHome "x86_64-linux" ./home-windows.nix;
+        "niax@big-thunder" = mkHome "x86_64-linux" [ ./home-windows.nix ];
 
         # Mac
-        "niax@lightcycle" = mkHome "aarch64-darwin" ./home-mac.nix;
+        "niax@lightcycle" = mkHome "aarch64-darwin" [ ./home-mac.nix ];
       };
       nixosConfigurations."hotel-hightower" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
           nixos-wsl.nixosModules.default
           home-manager.nixosModules.home-manager
-          ({pkgs, ...}: {
+          sops-nix.nixosModules.sops
+          ({pkgs, config, ...}: {
             nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+            sops.defaultSopsFile = ./secrets/hotel-hightower.yaml;
+            sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
             nixpkgs.overlays = [ claude-code.overlays.default ];
             nixpkgs.config.allowUnfree = true;
@@ -57,6 +64,7 @@
               vim
             ];
             programs.zsh.enable = true;
+            services.openssh.enable = true;
 
             users.users.niax = {
               isNormalUser = true;
@@ -70,7 +78,17 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              users.niax = ./home-windows.nix;
+              sharedModules = [
+                sops-nix.homeManagerModules.sops
+                { sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ]; }
+              ];
+
+              users.niax = {...}: {
+                imports = [
+                  ./home-windows.nix
+                  ./blue-team.nix
+                ];
+              };
             };
           })
         ];

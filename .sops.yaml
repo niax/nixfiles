@@ -1,0 +1,19 @@
+keys:
+  - &hotel-hightower-host age14eutr45a6xr2d0ngkv8ayld5662l6rsgall4thhmun3x6ard4ulqe0fqj2
+  - &hotel-hightower-user age1jfudxjjhqcjfkjsnh335avfs529fkdlaxj2hrdg6yf6ayw2p3vjsuptyvr
+
+creation_rules:
+  - path_regex: secrets/blue-team\.yaml$
+    key_groups:
+      - age:
+        - *hotel-hightower-host
+        - *hotel-hightower-user
+  - path_regex: secrets/hotel-hightower\.yaml$
+    key_groups:
+      - age:
+        - *hotel-hightower-host
+        - *hotel-hightower-user
+  - path_regex: secrets/.*\.yaml$
+    key_groups:
+      - age:
+          - *hotel-hightower-user
