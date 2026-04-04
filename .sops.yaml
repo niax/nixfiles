@@ -9,6 +9,7 @@ creation_rules:
       - age:
         - *hotel-hightower-host
         - *hotel-hightower-user
+        - *lightcycle-user
   - path_regex: secrets/hotel-hightower\.yaml$
     key_groups:
       - age:
@@ -17,4 +18,5 @@ creation_rules:
   - path_regex: secrets/.*\.yaml$
     key_groups:
       - age:
-          - *hotel-hightower-user
+        - *hotel-hightower-user
+        - *lightcycle-user
