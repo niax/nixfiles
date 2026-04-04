@@ -1,6 +1,7 @@
 keys:
   - &hotel-hightower-host age14eutr45a6xr2d0ngkv8ayld5662l6rsgall4thhmun3x6ard4ulqe0fqj2
   - &hotel-hightower-user age1jfudxjjhqcjfkjsnh335avfs529fkdlaxj2hrdg6yf6ayw2p3vjsuptyvr
+  - &lightcycle-user age1wf0vluqr6y84ek8nqty759xxf8cfvqg46v0558e6almqn73839aq6vy0dn
 
 creation_rules:
   - path_regex: secrets/blue-team\.yaml$
