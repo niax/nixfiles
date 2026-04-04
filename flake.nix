@@ -31,72 +31,18 @@
         };
     in {
       homeConfigurations = {
-        # Windows/WSL
-        "niax@big-thunder" = mkHome "x86_64-linux" [ ./home-windows.nix ];
-
-        # Mac
-        "niax@lightcycle" = mkHome "aarch64-darwin" [
-          ./home-mac.nix
-          ./blue-team.nix
-          ({config, ...}: {
-            sops.age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
-          })
-        ];
+        "niax@big-thunder" = mkHome "x86_64-linux" [ ./hosts/big-thunder.nix ];
+        "niax@lightcycle"  = mkHome "aarch64-darwin" [ ./hosts/lightcycle.nix ];
       };
       nixosConfigurations."hotel-hightower" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
+        specialArgs = { inherit sops-nix; };
         modules = [
           nixos-wsl.nixosModules.default
           home-manager.nixosModules.home-manager
           sops-nix.nixosModules.sops
-          ({pkgs, config, ...}: {
-            nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
-            sops.defaultSopsFile = ./secrets/hotel-hightower.yaml;
-            sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-
-            nixpkgs.overlays = [ claude-code.overlays.default ];
-            nixpkgs.config.allowUnfree = true;
-
-            wsl.enable = true;
-            wsl.defaultUser = "niax";
-
-            system.stateVersion = "25.11"; # NO TOUCH ME!
-
-            networking.hostName = "hotel-hightower";
-
-            environment.systemPackages = with pkgs; [
-              git
-              vim
-            ];
-            programs.zsh.enable = true;
-            services.openssh.enable = true;
-
-            users.users.niax = {
-              isNormalUser = true;
-              home = "/home/niax";
-              description = "niax";
-              extraGroups = [
-                "wheel"
-              ];
-              shell = pkgs.zsh;
-            };
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              sharedModules = [
-                sops-nix.homeManagerModules.sops
-                { sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ]; }
-              ];
-
-              users.niax = {...}: {
-                imports = [
-                  ./home-windows.nix
-                  ./blue-team.nix
-                ];
-              };
-            };
-          })
+          ({ nixpkgs.overlays = [ claude-code.overlays.default ]; nixpkgs.config.allowUnfree = true; })
+          ./hosts/hotel-hightower.nix
         ];
       };
     };
