@@ -2,6 +2,8 @@ keys:
   - &hotel-hightower-host age14eutr45a6xr2d0ngkv8ayld5662l6rsgall4thhmun3x6ard4ulqe0fqj2
   - &hotel-hightower-user age1jfudxjjhqcjfkjsnh335avfs529fkdlaxj2hrdg6yf6ayw2p3vjsuptyvr
   - &lightcycle age1czsehhtpchvu78lsnvaeu6zqlpdksa5ufw9mnj4esnqed92xw4xqcl7yp3
+  - &big-thunder-host age12u9wq9v2sc95xsgxujl2srw2pr5asyn0ukmnn5l374d2tg26hg0svgapv7
+  - &big-thunder-user age1ffgzea3f2xjtq85jl8ufg5lse2fdhn6xw47zqawz7u35r52u2unq4l0vld
 
 creation_rules:
   - path_regex: secrets/blue-team\.yaml$
@@ -15,8 +17,14 @@ creation_rules:
       - age:
         - *hotel-hightower-host
         - *hotel-hightower-user
+  - path_regex: secrets/big-thunder\.yaml$
+    key_groups:
+      - age:
+        - *big-thunder-host
+        - *big-thunder-user
   - path_regex: secrets/.*\.yaml$
     key_groups:
       - age:
         - *hotel-hightower-user
         - *lightcycle
+        - *big-thunder-user

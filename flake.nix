@@ -31,19 +31,33 @@
         };
     in {
       homeConfigurations = {
-        "niax@big-thunder" = mkHome "x86_64-linux" [ ./hosts/big-thunder.nix ];
         "niax@lightcycle"  = mkHome "aarch64-darwin" [ ./hosts/lightcycle.nix ];
       };
-      nixosConfigurations."hotel-hightower" = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { inherit sops-nix; };
-        modules = [
-          nixos-wsl.nixosModules.default
-          home-manager.nixosModules.home-manager
-          sops-nix.nixosModules.sops
-          ({ nixpkgs.overlays = [ claude-code.overlays.default ]; nixpkgs.config.allowUnfree = true; })
-          ./hosts/hotel-hightower.nix
-        ];
+
+      nixosConfigurations = {
+        "big-thunder" = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit sops-nix; };
+          modules = [
+            nixos-wsl.nixosModules.default
+            home-manager.nixosModules.home-manager
+            sops-nix.nixosModules.sops
+            ({ nixpkgs.overlays = [ claude-code.overlays.default ]; nixpkgs.config.allowUnfree = true; })
+            ./hosts/big-thunder.nix
+          ];
+        };
+
+        "hotel-hightower" = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit sops-nix; };
+          modules = [
+            nixos-wsl.nixosModules.default
+            home-manager.nixosModules.home-manager
+            sops-nix.nixosModules.sops
+            ({ nixpkgs.overlays = [ claude-code.overlays.default ]; nixpkgs.config.allowUnfree = true; })
+            ./hosts/hotel-hightower.nix
+          ];
+        };
       };
     };
 }
