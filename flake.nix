@@ -29,35 +29,33 @@
           };
           modules = [ sops-nix.homeManagerModules.sops ] ++ modules;
         };
+      mkWslOs = modules:
+        nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit sops-nix; };
+          modules = [
+            nixos-wsl.nixosModules.default
+            home-manager.nixosModules.home-manager
+            sops-nix.nixosModules.sops
+            ({ nixpkgs.overlays = [ claude-code.overlays.default ]; nixpkgs.config.allowUnfree = true; })
+          ] ++ modules;
+        };
     in {
+      homeManagerModules = {
+        base = ./modules/base.nix;
+        shell = ./modules/shell.nix;
+        vim = ./modules/vim;
+        tmux = ./modules/tmux;
+        macos-yabai = ./modules/macos/yabai;
+      };
+
       homeConfigurations = {
-        "niax@lightcycle"  = mkHome "aarch64-darwin" [ ./hosts/lightcycle.nix ];
+        "niax@lightcycle" = mkHome "aarch64-darwin" [ ./hosts/lightcycle.nix ];
       };
 
       nixosConfigurations = {
-        "big-thunder" = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = { inherit sops-nix; };
-          modules = [
-            nixos-wsl.nixosModules.default
-            home-manager.nixosModules.home-manager
-            sops-nix.nixosModules.sops
-            ({ nixpkgs.overlays = [ claude-code.overlays.default ]; nixpkgs.config.allowUnfree = true; })
-            ./hosts/big-thunder.nix
-          ];
-        };
-
-        "hotel-hightower" = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = { inherit sops-nix; };
-          modules = [
-            nixos-wsl.nixosModules.default
-            home-manager.nixosModules.home-manager
-            sops-nix.nixosModules.sops
-            ({ nixpkgs.overlays = [ claude-code.overlays.default ]; nixpkgs.config.allowUnfree = true; })
-            ./hosts/hotel-hightower.nix
-          ];
-        };
+        "big-thunder" = mkWslOs [ ./hosts/big-thunder.nix ];
+        "hotel-hightower" = mkWslOs [ ./hosts/hotel-hightower.nix ];
       };
     };
 }
