@@ -1,14 +1,18 @@
 { pkgs, config, sops-nix, ... }:
 
 {
+  imports = [
+    ../../modules/niax-user.nix
+    ./hardware-configuration.nix
+  ];
+
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.trusted-users = [ "niax" ];
+
+  nix.gc = { automatic = true; dates = "weekly"; options = "--delete-older-than 30d"; };
+  nix.optimise.automatic = true;
 
   system.stateVersion = "25.11"; # NO TOUCH ME!
-
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -18,7 +22,7 @@
     "net.ipv4.ip_forward" = 1;
   };
 
-  networking.hostName = "basestar";
+  networking.hostName = "soarin";
 
   networking.dhcpcd.enable = false;
   networking.interfaces.enp87s0 = {
@@ -45,17 +49,7 @@
     keyMap = "uk";
   };
 
-  users.users.niax = {
-    isNormalUser = true;
-    home = "/home/niax";
-    description = "niax";
-    extraGroups = [ "wheel" ];
-    shell = pkgs.zsh;
 
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINMI6YMzipLPfoK9iX1jDIY1KGwsxh5K2eta+gk5jwGx big-thunder"
-    ];
-  };
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
@@ -147,9 +141,7 @@
 
     trustedInterfaces = [ "tailscale0" ];
 
-    allowedTCPPorts = [
-      22
-    ] ++ config.services.openssh.ports;
+    allowedTCPPorts = config.services.openssh.ports;
 
     allowedUDPPorts = [
       config.services.tailscale.port

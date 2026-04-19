@@ -14,6 +14,10 @@
       size = 50000;
     };
 
+    sessionVariables = {
+      PAGER = "less -R";
+    };
+
     initContent = lib.mkBefore ''
       if [ -e "$HOME/.zshrc-local-early" ]; then
         source "$HOME/.zshrc-local-early"
@@ -22,8 +26,6 @@
       if [ -e "$HOME/.zshrc-local" ]; then
         source "$HOME/.zshrc-local"
       fi
-
-      export PAGER="less -R"
 
       autoload -U edit-command-line
       zle -N edit-command-line

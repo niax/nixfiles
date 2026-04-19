@@ -43,6 +43,12 @@
             home-manager.nixosModules.home-manager
             sops-nix.nixosModules.sops
             ({ nixpkgs.overlays = [ claude-code.overlays.default ]; nixpkgs.config.allowUnfree = true; })
+            {
+              home-manager.sharedModules = [
+                sops-nix.homeManagerModules.sops
+                { sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ]; }
+              ];
+            }
           ] ++ modules;
         };
       mkNixOs = modules:

@@ -32,8 +32,6 @@
 
     # Dev tools
     tig
-    poetry
-    awscli2
 
     # Programming languages
     go
