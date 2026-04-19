@@ -45,6 +45,15 @@
             ({ nixpkgs.overlays = [ claude-code.overlays.default ]; nixpkgs.config.allowUnfree = true; })
           ] ++ modules;
         };
+      mkNixOs = modules:
+        nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit sops-nix; };
+          modules = [
+            home-manager.nixosModules.home-manager
+            sops-nix.nixosModules.sops
+          ] ++ modules;
+        };
     in {
       homeManagerModules = {
         base = ./modules/base.nix;
@@ -64,6 +73,7 @@
       nixosConfigurations = {
         "big-thunder" = mkWslOs [ ./hosts/big-thunder.nix ];
         "hotel-hightower" = mkWslOs [ ./hosts/hotel-hightower.nix ];
+        "soarin" = mkNixOs [ ./hosts/soarin ];
       };
     };
 }
