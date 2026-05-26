@@ -1,18 +1,37 @@
-{ pkgs, lib, config, ... }: {
-  sops.age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+{ pkgs, sops-nix, lib, ... }: {
+  imports = [ ../modules/macos/yabai ];
 
-  imports = [
-    ../modules/base.nix
-    ../modules/personal.nix
-    ../modules/macos/yabai
-  ];
+  networking.hostName = "lightcycle";
+  system.stateVersion = 5;
 
-  home.username = "niax";
-  home.homeDirectory = lib.mkForce "/Users/niax";
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  home.packages = [ pkgs.claude-code ];
+  system.primaryUser = "niax";
+  users.users.niax.home = "/Users/niax";
 
-  programs.keychain = {
-    keys = [ "id_ed25519" ];
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    sharedModules = [
+      sops-nix.homeManagerModules.sops
+      { sops.age.keyFile = "/Users/niax/.config/sops/age/keys.txt"; }
+    ];
+    users.niax = {
+      imports = [
+        ../modules/base.nix
+        ../modules/personal.nix
+        ../modules/blue-team.nix
+        ({ pkgs, ... }: {
+          home.username = "niax";
+          home.homeDirectory = "/Users/niax";
+
+          home.packages = [ pkgs.claude-code ];
+
+          programs.keychain = {
+            keys = [ "id_ed25519" ];
+          };
+        })
+      ];
+    };
   };
 }

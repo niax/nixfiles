@@ -4,9 +4,14 @@
   inputs = {
     claude-code.url = "github:sadjow/claude-code-nix";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin/nix-darwin-25.11";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL/release-25.11";
@@ -18,16 +23,16 @@
     };
   };
 
-  outputs = { nixpkgs, nixos-wsl, home-manager, claude-code, sops-nix, ... }:
+  outputs = { nixpkgs, nixos-wsl, home-manager, nix-darwin, nixpkgs-darwin, claude-code, sops-nix, ... }:
     let
-      mkHome = system: modules:
-        home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs {
-            inherit system;
-            overlays = [ claude-code.overlays.default ];
-            config.allowUnfree = true;
-          };
-          modules = [ sops-nix.homeManagerModules.sops ] ++ modules;
+      mkDarwinOs = system: modules:
+        nix-darwin.lib.darwinSystem {
+          specialArgs = { inherit sops-nix; };
+          modules = [
+            { nixpkgs.hostPlatform = system; }
+            home-manager.darwinModules.home-manager
+            { nixpkgs.overlays = [ claude-code.overlays.default ]; nixpkgs.config.allowUnfree = true; }
+          ] ++ modules;
         };
       mkWslOs = modules:
         nixpkgs.lib.nixosSystem {
@@ -46,11 +51,14 @@
         shell = ./modules/shell.nix;
         vim = ./modules/vim;
         tmux = ./modules/tmux;
+      };
+
+      darwinModules = {
         macos-yabai = ./modules/macos/yabai;
       };
 
-      homeConfigurations = {
-        "niax@lightcycle" = mkHome "aarch64-darwin" [ ./hosts/lightcycle.nix ];
+      darwinConfigurations = {
+        "lightcycle" = mkDarwinOs "aarch64-darwin" [ ./hosts/lightcycle.nix ];
       };
 
       nixosConfigurations = {

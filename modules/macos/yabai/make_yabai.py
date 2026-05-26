@@ -55,35 +55,35 @@ command_manipulators = []
 
 key_map = {
     # Make float
-    'x': '/opt/homebrew/bin/yabai -m window --toggle float',
+    'x': '@yabai@/bin/yabai -m window --toggle float',
     # Make fullscreen
-    'f': '/opt/homebrew/bin/yabai -m window --toggle zoom-fullscreen',
+    'f': '@yabai@/bin/yabai -m window --toggle zoom-fullscreen',
 
     # Move windows
-    'h': '/opt/homebrew/bin/yabai -m window --warp west',
-    'j': '/opt/homebrew/bin/yabai -m window --warp south',
-    'k': '/opt/homebrew/bin/yabai -m window --warp north',
-    'l': '/opt/homebrew/bin/yabai -m window --warp east',
+    'h': '@yabai@/bin/yabai -m window --warp west',
+    'j': '@yabai@/bin/yabai -m window --warp south',
+    'k': '@yabai@/bin/yabai -m window --warp north',
+    'l': '@yabai@/bin/yabai -m window --warp east',
 
     # Swap windows
-    'shift h': '/opt/homebrew/bin/yabai -m window --swap west',
-    'shift j': '/opt/homebrew/bin/yabai -m window --swap north',
-    'shift k': '/opt/homebrew/bin/yabai -m window --swap south',
-    'shift l': '/opt/homebrew/bin/yabai -m window --swap east',
+    'shift h': '@yabai@/bin/yabai -m window --swap west',
+    'shift j': '@yabai@/bin/yabai -m window --swap north',
+    'shift k': '@yabai@/bin/yabai -m window --swap south',
+    'shift l': '@yabai@/bin/yabai -m window --swap east',
 
     # Rotate tree
-    'r': '/opt/homebrew/bin/yabai -m space --rotate 90',
-    'e': '/opt/homebrew/bin/yabai -m space --mirror y-axis',
-    'q': '/opt/homebrew/bin/yabai -m space --mirror x-axis',
+    'r': '@yabai@/bin/yabai -m space --rotate 90',
+    'e': '@yabai@/bin/yabai -m space --mirror y-axis',
+    'q': '@yabai@/bin/yabai -m space --mirror x-axis',
 
     # Change split size
-    'control j': '/opt/homebrew/bin/yabai -m window --ratio rel:-0.05',
-    'control k': '/opt/homebrew/bin/yabai -m window --ratio rel:0.05',
-    '=': '/opt/homebrew/bin/yabai -m window --ratio abs:0.5',
+    'control j': '@yabai@/bin/yabai -m window --ratio rel:-0.05',
+    'control k': '@yabai@/bin/yabai -m window --ratio rel:0.05',
+    '=': '@yabai@/bin/yabai -m window --ratio abs:0.5',
 
 
     # Restart yabai
-    'control p': '/opt/homebrew/bin/brew services restart yabai',
+    'control p': '@yabai@/bin/yabai --restart-service',
 }
 
 for key_spec, command in key_map.items():
