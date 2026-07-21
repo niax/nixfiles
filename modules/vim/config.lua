@@ -1,9 +1,3 @@
-require('nvim-treesitter.configs').setup {
-  highlight = {
-	  enable = false
-  },
-}
-
 -- kanagawa options:
 require('kanagawa').setup({
     compile = false,             -- enable compiling the colorscheme

@@ -28,20 +28,17 @@ cmp.setup({
 
 local lspconfig = require('lspconfig')
 
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    update_in_insert = true,
-  }
-)
+vim.diagnostic.config({
+  update_in_insert = true,
+})
 
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
     local bufnr = args.buf
     local client = vim.lsp.get_client_by_id(args.data.client_id)
     local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-    local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
-    buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+    vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
     -- Mappings.
     local opts = { noremap = true, silent = true }
@@ -61,10 +58,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
     buf_set_keymap('n', '<leader>rl', '<cmd>lua vim.diagnostic.set_loclist()<CR>', opts)
 
     -- Set some keybinds conditional on server capabilities
-    if client.server_capabilities.document_formatting then
-      buf_set_keymap("n", "<leader>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
-    elseif client.server_capabilities.document_range_formatting then
-      buf_set_keymap("n", "<leader>f", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
+    if client.server_capabilities.documentFormattingProvider
+        or client.server_capabilities.documentRangeFormattingProvider then
+      buf_set_keymap("n", "<leader>f", "<cmd>lua vim.lsp.buf.format({ async = true })<CR>", opts)
     end
   end,
 })
@@ -78,6 +74,7 @@ local servers = {
   "vimls",
   "clangd",
   "rust_analyzer",
+  "nil_ls",
 }
 
 for _, lsp in ipairs(servers) do

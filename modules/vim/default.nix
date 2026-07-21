@@ -25,20 +25,22 @@ in
 
     withPython3 = true;
     withNodeJs = true;
+    withRuby = true;
 
     extraPackages = with pkgs; [
       tree-sitter
 
       # Language servers
-      nodePackages.vim-language-server
+      vim-language-server
       gopls
-      nodePackages.typescript
-      nodePackages.typescript-language-server
+      typescript
+      typescript-language-server
       pyright
       black
       clang-tools
       jdt-language-server
       lombok
+      nil
 
       # Rust things
       rust-analyzer
