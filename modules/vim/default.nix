@@ -48,6 +48,7 @@ in
     plugins = with pkgs.vimPlugins; [
       # Style
       (plugin "ryanoasis/vim-devicons" "71f239af28b7214eebb60d4ea5bd040291fb7e33" "0kshppxgi63wn96a8h9zv7drwqcbljin5jhszh8q7pqw2xsd83gn")
+      (plugin "nvim-tree/nvim-web-devicons" "0ca28b61a04fe7426cefbdd52c2647ef0e335b5f" "0lfbbqz7wsjzhxy7icychppb0299dy3jv7rmbvn1mcvqa6mv7w4q")
       (plugin "rebelot/kanagawa.nvim" "debe91547d7fb1eef34ce26a5106f277fbfdd109" "02108bvbrd1a4n6kip7qk1xfzrg789cyd8xz4pi58400zr6j37lb")
       (plugin "itchyny/lightline.vim" "e358557e1a9f9fc860416c8eb2e34c0404078155" "07d61nd3k4gmfxa8j17imlwakgj1iw485w880bjfdms347jaklvc")
 
@@ -73,12 +74,7 @@ in
       (plugin "rafamadriz/friendly-snippets" "e11b09bf10706bb74e16e4c3d11b2274d62e687f" "0d0f2slxi2j1y4l8swzhgwba10w9y835nff1ml14pdfqr0nmhw66")
 
       # Search/Ctrl-P
-      (plugin "nvim-lua/popup.nvim" "b7404d35d5d3548a82149238289fa71f7f6de4ac" "093r3cy02gfp7sphrag59n3fjhns7xdsam1ngiwhwlig3bzv7mbl")
-      (plugin "nvim-lua/plenary.nvim" "b9fd5226c2f76c951fc8ed5923d85e4de065e509" "1kg043h7dqcrqqgg8pp6hsldx7jdhlh8qwad2kkckia191xgnjgm")
-      (plugin "nvim-telescope/telescope.nvim" "b4da76be54691e854d3e0e02c36b0245f945c2c7" "161qlx099ymi62qsd89srda605ynks1sswx3djamrwqp3dxb9596")
-
-      # Slop
-      (plugin "olimorris/codecompanion.nvim" "879e0511161c59e45ff04aff2bce6bcb6b86642b" "1z463vf7w37xnxg9vpznzmvn7x52ixn2mzr0v64mnnl0x27yy2sh") # 18.5.0
+      (plugin "folke/snacks.nvim" "882c996cf28183f4d63640de0b4c02ec886d01f2" "14hhnbivyqmvkj42iccjlqq6484s7i0bmazpcxq976974y61fkc1")
     ];
 
     extraConfig = builtins.concatStringsSep "\n" [

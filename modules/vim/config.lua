@@ -26,3 +26,12 @@ require('kanagawa').setup({
 
 -- setup must be called before loading
 vim.cmd("colorscheme kanagawa")
+
+-- snacks.nvim: picker replaces telescope for find_files/live_grep/buffers.
+-- The telescope preset puts the prompt at the bottom, below the results.
+require('snacks').setup({
+    picker = {
+        enabled = true,
+        layout = { preset = "telescope" },
+    },
+})

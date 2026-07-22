@@ -15,7 +15,7 @@ set noexpandtab
 set autoindent
 set smartcase "Case insensitve matching
 set ruler "Always show status bar
-set laststatus=2 " (also) always show the status bar
+set laststatus=3 " single global status bar (floating picker windows don't each get one)
 set history=1000
 
 " Enable the mouse

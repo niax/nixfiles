@@ -1,7 +1,7 @@
-" Telescope Configs
-nnoremap <C-p> <cmd>Telescope find_files<cr>
-nnoremap <space>/ <cmd>Telescope live_grep<cr>
-nnoremap <space>b <cmd>Telescope buffers<cr>
+" Picker Configs (snacks.nvim)
+nnoremap <C-p> <cmd>lua Snacks.picker.files()<cr>
+nnoremap <space>/ <cmd>lua Snacks.picker.grep()<cr>
+nnoremap <space>b <cmd>lua Snacks.picker.buffers()<cr>
 
 " lightline Configs
 let g:lightline = {
