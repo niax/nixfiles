@@ -18,20 +18,25 @@
       PAGER = "less -R";
     };
 
-    initContent = lib.mkBefore ''
-      if [ -e "$HOME/.zshrc-local-early" ]; then
-        source "$HOME/.zshrc-local-early"
-      fi
+    initContent = lib.mkMerge [
+      (lib.mkBefore ''
+        if [ -e "$HOME/.zshrc-local-early" ]; then
+          source "$HOME/.zshrc-local-early"
+        fi
 
-      if [ -e "$HOME/.zshrc-local" ]; then
-        source "$HOME/.zshrc-local"
-      fi
-
-      autoload -U edit-command-line
-      zle -N edit-command-line
-      bindkey '^xe' edit-command-line
-      bindkey '^x^e' edit-command-line
-    '';
+        if [ -e "$HOME/.zshrc-local" ]; then
+          source "$HOME/.zshrc-local"
+        fi
+      '')
+      # Must run after home-manager's `bindkey -e` and compinit: before those,
+      # `main` still aliases viins, and compinit claims ^Xe for _expand_word.
+      ''
+        autoload -Uz edit-command-line
+        zle -N edit-command-line
+        bindkey -M emacs '^xe' edit-command-line
+        bindkey -M emacs '^x^e' edit-command-line
+      ''
+    ];
 
     shellAliases = {
       gc = "git commit -v";
