@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ../../modules/auto-upgrade.nix
     ../../modules/niax-user.nix
     ./hardware-configuration.nix
     ./unifi-os-server.nix
@@ -9,9 +10,6 @@
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.settings.trusted-users = [ "niax" ];
-
-  nix.gc = { automatic = true; dates = "weekly"; options = "--delete-older-than 30d"; };
-  nix.optimise.automatic = true;
 
   system.stateVersion = "25.11"; # NO TOUCH ME!
 

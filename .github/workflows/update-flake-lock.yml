@@ -1,0 +1,33 @@
+name: Update flake.lock
+
+on:
+  schedule:
+    # Sundays, ahead of the hosts' 04:40 UTC auto-upgrade.
+    - cron: "0 1 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: cachix/install-nix-action@v31
+      - run: nix flake update
+      # Hosts deploy whatever lands on main, so don't push a lock that doesn't evaluate.
+      - name: Evaluate NixOS hosts
+        run: |
+          for host in $(nix eval --raw .#nixosConfigurations --apply 'c: builtins.concatStringsSep " " (builtins.attrNames c)'); do
+            echo "Evaluating $host"
+            nix eval --raw ".#nixosConfigurations.$host.config.system.build.toplevel.drvPath"
+            echo
+          done
+      - name: Commit and push
+        run: |
+          git diff --quiet flake.lock && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: Update flake.lock" flake.lock
+          git push

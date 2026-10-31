@@ -1,5 +1,8 @@
 { pkgs, ... }: {
-  imports = [ ./niax-user.nix ];
+  imports = [
+    ./auto-upgrade.nix
+    ./niax-user.nix
+  ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 

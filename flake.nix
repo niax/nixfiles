@@ -23,8 +23,10 @@
     };
   };
 
-  outputs = { nixpkgs, nixos-wsl, home-manager, nix-darwin, nixpkgs-darwin, claude-code, sops-nix, ... }:
+  outputs = { self, nixpkgs, nixos-wsl, home-manager, nix-darwin, nixpkgs-darwin, claude-code, sops-nix, ... }:
     let
+      # Read by the guard in modules/auto-upgrade.nix.
+      revisionModule = { system.configurationRevision = self.rev or self.dirtyRev or null; };
       mkDarwinOs = system: modules:
         nix-darwin.lib.darwinSystem {
           specialArgs = { inherit sops-nix; };
@@ -39,6 +41,7 @@
           system = "x86_64-linux";
           specialArgs = { inherit sops-nix; };
           modules = [
+            revisionModule
             nixos-wsl.nixosModules.default
             home-manager.nixosModules.home-manager
             sops-nix.nixosModules.sops
@@ -56,6 +59,7 @@
           system = "x86_64-linux";
           specialArgs = { inherit sops-nix; };
           modules = [
+            revisionModule
             home-manager.nixosModules.home-manager
             sops-nix.nixosModules.sops
           ] ++ modules;
