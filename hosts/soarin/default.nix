@@ -4,6 +4,7 @@
   imports = [
     ../../modules/niax-user.nix
     ./hardware-configuration.nix
+    ./unifi-os-server.nix
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -29,6 +30,11 @@
     ipv4.addresses = [
       {
         address = "10.0.80.5";
+        prefixLength = 24;
+      }
+      {
+        # Dedicated address for the unifi-os-server container, see ./unifi-os-server.nix
+        address = "10.0.80.6";
         prefixLength = 24;
       }
     ];
