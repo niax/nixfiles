@@ -35,8 +35,6 @@ in {
     restartUnits = [ "prometheus-snmp-exporter.service" ];
   };
 
-  # The exporter holds the community string and will query whatever target it's
-  # given, so it stays on loopback. Prometheus has no auth, so it does too.
   services.prometheus.exporters.snmp = {
     enable = true;
     listenAddress = "127.0.0.1";
@@ -63,11 +61,31 @@ in {
   services.cadvisor = {
     enable = true;
     listenAddress = "127.0.0.1";
-    # The default, 8080, is the UniFi container's port on 10.0.80.6.
     port = 9338;
     extraOptions = [
       "-enable_metrics=cpu,memory"
       "-housekeeping_interval=15s"
+    ];
+  };
+
+  # Latency and loss towards the router and the internet, to tell a LAN problem
+  # from an upstream one. Rendered by dashboards/smokeping.json.
+  services.prometheus.exporters.smokeping = {
+    enable = true;
+    listenAddress = "127.0.0.1";
+    hosts = [
+      "10.0.80.1"
+      "1.1.1.1"
+      "8.8.8.8"
+    ];
+    # The default buckets double in size, which is too coarse to see jitter at
+    # the single-digit milliseconds these targets sit at.
+    buckets = builtins.concatStringsSep "," [
+      "0.0001" "0.0002" "0.0003" "0.0005" "0.00075"
+      "0.001" "0.0015" "0.002" "0.003" "0.004" "0.005" "0.006" "0.007" "0.008" "0.009"
+      "0.01" "0.0125" "0.015" "0.02" "0.025" "0.03" "0.04" "0.05" "0.075"
+      "0.1" "0.15" "0.2" "0.3" "0.5"
+      "1" "2" "5"
     ];
   };
 
@@ -93,6 +111,7 @@ in {
       }
       (localJob "node" nodeExporter.port)
       (localJob "cadvisor" config.services.cadvisor.port)
+      (localJob "smokeping" config.services.prometheus.exporters.smokeping.port)
     ];
   };
 

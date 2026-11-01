@@ -1,0 +1,86 @@
+{
+  "uid": "smokeping",
+  "title": "Smokeping",
+  "schemaVersion": 39,
+  "refresh": "1m",
+  "time": { "from": "now-6h", "to": "now" },
+  "templating": {
+    "list": [
+      {
+        "name": "host",
+        "label": "Target",
+        "type": "query",
+        "datasource": { "type": "prometheus", "uid": "prometheus" },
+        "query": { "query": "label_values(smokeping_requests_total, host)", "refId": "host" },
+        "refresh": 2,
+        "multi": true,
+        "includeAll": true,
+        "current": { "text": "All", "value": "$__all" }
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Packet loss",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+      "fieldConfig": { "defaults": { "unit": "percentunit", "min": 0, "max": 1 } },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "clamp_min(1 - sum by (host) (rate(smokeping_response_duration_seconds_count{host=~\"$host\"}[$__rate_interval])) / sum by (host) (rate(smokeping_requests_total{host=~\"$host\"}[$__rate_interval])), 0)",
+          "legendFormat": "{{host}}"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Median latency",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "custom": { "scaleDistribution": { "type": "log", "log": 2 } }
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "histogram_quantile(0.5, sum by (le, host) (rate(smokeping_response_duration_seconds_bucket{host=~\"$host\"}[$__rate_interval])))",
+          "legendFormat": "{{host}}"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Latency: $host",
+      "type": "heatmap",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 0, "y": 8, "w": 24, "h": 9 },
+      "repeat": "host",
+      "repeatDirection": "v",
+      "options": {
+        "calculate": false,
+        "cellGap": 0,
+        "color": { "mode": "scheme", "scheme": "Spectral", "scale": "exponential", "exponent": 0.5, "steps": 64 },
+        "filterValues": { "le": 1e-9 },
+        "legend": { "show": true },
+        "rowsFrame": { "layout": "auto" },
+        "tooltip": { "mode": "single", "yHistogram": true },
+        "yAxis": { "axisPlacement": "left", "unit": "s" }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (le) (rate(smokeping_response_duration_seconds_bucket{host=~\"$host\"}[$__rate_interval]))",
+          "format": "heatmap",
+          "legendFormat": "{{le}}"
+        }
+      ]
+    }
+  ]
+}
