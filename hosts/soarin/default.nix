@@ -5,6 +5,7 @@
     ../../modules/auto-upgrade.nix
     ../../modules/niax-user.nix
     ./hardware-configuration.nix
+    ./monitoring.nix
     ./unifi-os-server.nix
   ];
 

@@ -1,0 +1,104 @@
+{
+  "uid": "snmp-interfaces",
+  "title": "SNMP interfaces",
+  "schemaVersion": 39,
+  "refresh": "1m",
+  "time": { "from": "now-6h", "to": "now" },
+  "templating": {
+    "list": [
+      {
+        "name": "instance",
+        "label": "Device",
+        "type": "query",
+        "datasource": { "type": "prometheus", "uid": "prometheus" },
+        "query": { "query": "label_values(up{job=\"snmp\"}, instance)", "refId": "instance" },
+        "refresh": 2
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Uptime",
+      "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 },
+      "fieldConfig": { "defaults": { "unit": "s" } },
+      "targets": [
+        { "refId": "A", "expr": "sysUpTime{instance=\"$instance\"} / 100" }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Scrape status",
+      "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 6, "y": 0, "w": 6, "h": 4 },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            { "type": "value", "options": { "0": { "text": "Down", "color": "red" }, "1": { "text": "Up", "color": "green" } } }
+          ]
+        }
+      },
+      "targets": [
+        { "refId": "A", "expr": "up{job=\"snmp\", instance=\"$instance\"}" }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Traffic in",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 0, "y": 4, "w": 24, "h": 10 },
+      "fieldConfig": { "defaults": { "unit": "bps" } },
+      "targets": [
+        { "refId": "A", "expr": "rate(ifHCInOctets{instance=\"$instance\"}[5m]) * 8", "legendFormat": "{{ifName}}" }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Traffic out",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 0, "y": 14, "w": 24, "h": 10 },
+      "fieldConfig": { "defaults": { "unit": "bps" } },
+      "targets": [
+        { "refId": "A", "expr": "rate(ifHCOutOctets{instance=\"$instance\"}[5m]) * 8", "legendFormat": "{{ifName}}" }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Interface errors and discards",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 0, "y": 24, "w": 24, "h": 8 },
+      "fieldConfig": { "defaults": { "unit": "pps" } },
+      "targets": [
+        { "refId": "A", "expr": "rate(ifInErrors{instance=\"$instance\"}[5m]) + rate(ifOutErrors{instance=\"$instance\"}[5m]) + rate(ifInDiscards{instance=\"$instance\"}[5m]) + rate(ifOutDiscards{instance=\"$instance\"}[5m])", "legendFormat": "{{ifName}}" }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "CPU load",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 0, "y": 32, "w": 12, "h": 8 },
+      "fieldConfig": { "defaults": { "unit": "percent", "min": 0, "max": 100 } },
+      "targets": [
+        { "refId": "A", "expr": "hrProcessorLoad{instance=\"$instance\"}", "legendFormat": "CPU {{hrDeviceIndex}}" }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Memory and disk used",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 12, "y": 32, "w": 12, "h": 8 },
+      "fieldConfig": { "defaults": { "unit": "percent", "min": 0, "max": 100 } },
+      "targets": [
+        { "refId": "A", "expr": "100 * hrStorageUsed{instance=\"$instance\"} / (hrStorageSize{instance=\"$instance\"} > 0)", "legendFormat": "{{hrStorageDescr}}" }
+      ]
+    }
+  ]
+}

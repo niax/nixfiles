@@ -27,6 +27,7 @@ creation_rules:
     key_groups:
       - age:
         - *soarin-host
+        - *big-thunder-user
   - path_regex: secrets/.*\.yaml$
     key_groups:
       - age:
