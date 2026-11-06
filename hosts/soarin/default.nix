@@ -6,6 +6,8 @@
     ../../modules/niax-user.nix
     ./hardware-configuration.nix
     ./monitoring.nix
+    ./samba.nix
+    ./storage.nix
     ./unifi-os-server.nix
   ];
 
