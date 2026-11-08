@@ -88,6 +88,10 @@
     };
   };
 
+  # Allow sudo to authenticate via a forwarded SSH agent
+  security.pam.sshAgentAuth.enable = true;
+  security.pam.services.sudo.sshAgentAuth = true;
+
   # Enable tailscale
   services.tailscale = {
     enable = true;
